@@ -4,7 +4,7 @@ import fs from 'fs'
 import { Readable, pipeline } from "stream";
 if (!fs.existsSync("./src/external/yt-dlp")) {
     console.log("yt-dlp not exists...\nDownloading...")
-    const downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/download/2024.03.10/yt-dlp_linux"
+    const downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/download/2024.03.10/yt-dlp"
     const res = await fetch(downloadUrl)
     if (!res.ok) {
         console.error("Download fail")
@@ -19,12 +19,12 @@ if (!fs.existsSync("./src/external/yt-dlp")) {
 
     })
 }
-
-if((fs.statSync("./src/external/yt-dlp").mode) != 33261){
+console.log(fs.statSync("./src/external/yt-dlp").mode)
+if(fs.statSync("./src/external/yt-dlp").mode != 33261){
     console.log("Adding execution permission to yt-dlp")
     fs.chmodSync("./src/external/yt-dlp",33261)
 }
-
+console.log(fs.statSync("./src/external/yt-dlp").mode)
 /**
  * @type {Map<string,ChannelQueue>}
  */

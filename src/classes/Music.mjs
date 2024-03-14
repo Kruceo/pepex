@@ -6,7 +6,9 @@ import crypto from 'crypto'
 
 const ytdlpPath = path.resolve("./src", "external", "yt-dlp")
 const dataPath = path.resolve("./data")
-console.log(ytdlpPath)
+
+if(!fs.existsSync("./data"))fs.mkdirSync("./data")
+
 class Music {
 
     constructor(url) {
@@ -74,7 +76,6 @@ class Music {
 
 }
 
-
 function createIdByString(text) {
     const hash = crypto.createHash('sha256');
     hash.update(text);
@@ -89,7 +90,4 @@ function getMusicFileByID(id) {
     return selected
 }
 
-
 export default Music
-
-
