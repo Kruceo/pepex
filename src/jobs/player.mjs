@@ -1,5 +1,25 @@
 import { Client } from "discord.js";
 import ChannelQueue from "../classes/ChannelQueue.mjs";
+import fs from 'fs'
+import { Readable, pipeline } from "stream";
+if (!fs.existsSync("./src/external/yt-dlp")) {
+    console.log("yt-dlp not exists...\nDownloading...")
+    const downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/download/2024.03.10/yt-dlp_linux"
+    const res = await fetch(downloadUrl)
+    if (!res.ok) {
+        console.error("Download fail")
+        process.exit()
+    }
+    await new Promise(resolve=>{
+        const fileWriter = fs.createWriteStream("./src/external/yt-dlp")
+        Readable.fromWeb(res.body).pipe(fileWriter).on("finish",()=>{
+            resolve()
+        })
+
+    })
+    
+
+}
 
 
 /**
@@ -13,7 +33,7 @@ const usersMap = new Map()
  */
 
 export function initPlayer(client) {
-
+    
     client.on('messageCreate', async message => {
         if (message.author.bot) return;
 
@@ -30,7 +50,7 @@ export function initPlayer(client) {
 
             const channelQueue = usersMap.get(channelID)
 
-            channelQueue.onError = (err)=>{
+            channelQueue.onError = (err) => {
                 message.channel.send("Deu ruim com essa dai.")
                 console.log(err)
             }
@@ -52,7 +72,7 @@ export function initPlayer(client) {
                 console.log("Disconnecting", channelID)
                 channelQueue.kill()
                 usersMap.delete(channelID)
-            }, 1000 * 60*8)
+            }, 1000 * 60 * 8)
 
             channelQueue.play(argString)
         }
@@ -91,10 +111,14 @@ export function initPlayer(client) {
 
         if (command === '!bigpanic') {
 
-           process.exit(1)
+            process.exit(1)
         }
     })
+
+    console.log("Audio Player initialized...")
 }
+
+
 
 function sanitize(str) {
     return str.replace(/\$|\(|\)|\{|\}|\/bin|\-|"|\||\&/g, " ")
