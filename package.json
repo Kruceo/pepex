@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@discordjs/voice": "^0.16.1",
+    "discord.js": "^14.14.1",
+    "roberta": "^1.1.0-1",
+    "tweetnacl": "^1.0.3"
+  }
+}
