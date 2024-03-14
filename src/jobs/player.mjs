@@ -13,14 +13,17 @@ if (!fs.existsSync("./src/external/yt-dlp")) {
     await new Promise(resolve=>{
         const fileWriter = fs.createWriteStream("./src/external/yt-dlp")
         Readable.fromWeb(res.body).pipe(fileWriter).on("finish",()=>{
+            
             resolve()
         })
 
     })
-    
-
 }
 
+if((fs.statSync("./src/external/yt-dlp").mode) != 33261){
+    console.log("Adding execution permission to yt-dlp")
+    fs.chmodSync("./src/external/yt-dlp",33261)
+}
 
 /**
  * @type {Map<string,ChannelQueue>}
@@ -115,7 +118,7 @@ export function initPlayer(client) {
         }
     })
 
-    console.log("Audio Player initialized...")
+    console.log("Audio Player initialized")
 }
 
 

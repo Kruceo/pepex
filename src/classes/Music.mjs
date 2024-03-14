@@ -29,6 +29,10 @@ class Music {
                 }
             })
 
+            processP.stdout.on("error", (d) => {
+                console.log(d)
+            })
+
             processP.on("exit", (d) => {
                 if (d != 0) {
                     this.searchIndex += 1
